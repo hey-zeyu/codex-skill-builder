@@ -1,181 +1,102 @@
-# Codex Skill Builder
+# codex-skill-builder
 
-> Turn your messy workflow into a reusable Codex skill.
+把你的重复工作，封装成一个 Codex 一看就会用的 skill。
 
-Most people ask Codex the same thing again and again.
+不是“再写一段更长的提示词”。这套工具的差异点是：**触发时机 + 工作流骨架 + 文件记忆 + 安全边界 + 可验证交付**。
 
-This project helps you package that repeated work into a skill Codex can trigger, follow, validate, and improve.
-
-In other words:
+## 三件套（MVP）
 
 ```text
-rough idea / README / script / checklist
-        -> Codex Skill Builder
-        -> clean Codex skill
+Need Snapshot     先问少量关键问题，不陷入无尽访谈
+Skill Blueprint   把想法拆成 SKILL.md / references / scripts / examples
+Validate & Ship   生成预览版，校验结构，准备发布
 ```
 
-## Why It Matters
+后续可扩展：skill-review（评审已有 skill）、doc-to-skill（把 README/API/CLI 文档转成 skill）、package-skill（打包发布）。
 
-Codex is powerful, but repeated prompting is fragile.
+## 你适合用它，如果你经常说
 
-A good skill is a reusable operating manual:
+- “我有方案，但不知道怎么高效地让 Codex 替我执行。”
+- “我每次都要让 Codex 按同一套流程做事。”
+- “我有 README / API 文档 / 脚本，想让 Codex 稳定复用。”
+- “我做了个 skill，但不知道触发描述、目录结构、安全边界对不对。”
 
-- it tells Codex when to wake up;
-- it gives Codex the workflow it should follow;
-- it keeps long knowledge in references;
-- it stores repeatable actions in scripts;
-- it adds safety boundaries before risky operations.
-
-This skill is for turning "I keep doing this manually" into "Codex knows how to do this now."
-
-## The Hook
-
-You do not need to know how to design a skill.
-
-Bring one of these:
-
-- a rough idea;
-- a repeated workflow;
-- a README/API/CLI doc;
-- a checklist;
-- a script folder;
-- an existing skill that feels messy.
-
-Codex Skill Builder turns it into a structured skill with a sane first version.
-
-## What You Get
-
-### 1. Need Snapshot
-
-Instead of asking 20 vague questions, it asks the few questions that actually change the design:
-
-- What should trigger the skill?
-- What input does the user provide?
-- What output should it produce?
-- What steps are repeated manually?
-- What must it never do without confirmation?
-- What does success look like?
-
-### 2. Skill Architecture
-
-It decides whether the skill should be:
-
-- just `SKILL.md`;
-- `SKILL.md` plus references;
-- a fuller skill with references, scripts, examples, and validation.
-
-### 3. Build + Review Loop
-
-It can:
-
-- scaffold a workspace preview copy;
-- write a clean `SKILL.md`;
-- move long guidance into `references/`;
-- add scripts for repeatable operations;
-- review trigger quality and safety;
-- validate the final folder.
-
-## Example
-
-Prompt:
+## 它怎么工作
 
 ```text
-Use codex-skill-builder. I want a skill that summarizes Douyin videos from links, screenshots, or pasted subtitles.
+粗糙想法 / 文档 / 脚本 / 清单
+        ↓
+Need Snapshot：确认输入、输出、禁区、成功标准
+        ↓
+Skill Blueprint：决定要不要 references / scripts / assets
+        ↓
+Workspace Preview：先生成预览，不直接污染全局 skill
+        ↓
+Validation：检查 SKILL.md、frontmatter、命名、结构
 ```
 
-Codex Skill Builder will not rush into files.
-
-It first asks for a Need Snapshot, then proposes a simple version and a stronger version, then waits for you to say `generate`.
-
-That rhythm keeps the skill useful instead of overbuilt.
-
-## Install
-
-Install this skill from:
+## 安装
 
 ```text
 https://github.com/hey-zeyu/codex-skill-builder/tree/main/skills/codex-skill-builder
 ```
 
-Manual install:
+安装后重启 Codex。
 
-```powershell
-Copy-Item -Recurse ".\skills\codex-skill-builder" "$env:CODEX_HOME\skills\codex-skill-builder"
-```
-
-Restart Codex after installing a new skill.
-
-## Use It For
+## 用法
 
 ```text
-Use codex-skill-builder to turn my release checklist into a Codex skill.
+Use codex-skill-builder. I want to turn my release checklist into a reusable Codex skill.
 ```
 
 ```text
-Use codex-skill-builder to convert this CLI README into a safe Codex skill.
+Use codex-skill-builder. Convert this CLI README into a safe Codex skill.
 ```
 
 ```text
-Use codex-skill-builder to review this skill folder for trigger quality, structure, and safety.
+Use codex-skill-builder. Review this skill folder for trigger quality, structure, and safety.
 ```
 
-More examples: [examples/prompts.md](examples/prompts.md)
+更多例子：`examples/prompts.md`
 
-## Repository Structure
+## 设计原则
+
+**Skill 不是提示词，是工作流容器。**
+
+一个好 skill 应该回答五件事：
+
+- 什么时候触发？
+- 用户会给什么输入？
+- Codex 应该按什么步骤做？
+- 哪些知识应该放进文件，而不是塞进上下文？
+- 哪些动作必须先确认？
+
+## 进度记忆（文件，不靠模型记忆）
 
 ```text
-codex-skill-builder/
-  README.md
-  LICENSE
-  examples/
-    prompts.md
-    before-after.md
-  skills/
-    codex-skill-builder/
-      SKILL.md
-      agents/openai.yaml
-      references/
-      scripts/
+SKILL.md                 主流程和触发逻辑
+references/             长规则、方法论、示例
+scripts/                可重复执行的确定性操作
+examples/               真实触发语和 before/after
+quick_validate.py       发布前结构校验
 ```
 
-## Design Principles
+## 为什么不是直接问 Codex？
 
-### Small First
+因为临场提示词会漂。
 
-Start with the smallest skill that can work. Add references, scripts, and assets only when they make the skill more repeatable.
+今天写得好，明天可能忘一步；这个会话知道，下个会话又要重讲。skill 的价值就是把“我会怎么做”沉淀成文件，让 Codex 下次继续按这套方式工作。
 
-### Clear Trigger
-
-The description should make it obvious when Codex should use the skill.
-
-### Progressive Disclosure
-
-Keep `SKILL.md` lean. Move long rules, examples, and domain knowledge into one-level reference files.
-
-### Safety Before Automation
-
-Skills that delete, upload, scrape, spend money, call APIs, or touch private data should require confirmation and clear boundaries.
-
-## Validate
+## 验证
 
 ```powershell
 python .\skills\codex-skill-builder\scripts\quick_validate.py .\skills\codex-skill-builder
 ```
 
-Package a `.skill` zip:
-
-```powershell
-python .\skills\codex-skill-builder\scripts\package_skill.py .\skills\codex-skill-builder .\dist
-```
-
-## Launch Copy
+## 一句话传播
 
 ```text
-I made a Codex skill that turns messy workflows, docs, scripts, and checklists into clean Codex skills.
-
-It asks the right setup questions, proposes the skill architecture, generates a workspace preview, adds safety boundaries, and validates the result.
-
-Repo: https://github.com/hey-zeyu/codex-skill-builder
+I made a Codex skill that turns messy workflows, docs, scripts, and checklists into reusable Codex skills.
 ```
 
 ## License
