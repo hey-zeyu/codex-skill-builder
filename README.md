@@ -35,7 +35,7 @@ Using the Codex skill installer:
 
 ```text
 Install from:
-https://github.com/czy112603-ui/codex-skill-builder/tree/main/skills/codex-skill-builder
+https://github.com/hey-zeyu/codex-skill-builder/tree/main/skills/codex-skill-builder
 ```
 
 Manual install:
@@ -127,7 +127,7 @@ I made a Codex skill that builds other Codex skills from messy workflows, docs, 
 
 It asks the right setup questions, proposes a skill architecture, generates a workspace preview, adds safety boundaries, and validates the result.
 
-Repo: https://github.com/czy112603-ui/codex-skill-builder
+Repo: https://github.com/hey-zeyu/codex-skill-builder
 ```
 
 ## License
