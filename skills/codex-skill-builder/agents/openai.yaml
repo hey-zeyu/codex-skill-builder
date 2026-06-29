@@ -1,0 +1,3 @@
+display_name: Codex Skill Builder
+short_description: Turn rough ideas, workflows, docs, or existing folders into Codex-ready skills.
+default_prompt: Help me turn this rough workflow into a clean Codex skill. Start by inferring the input, output, scope, architecture, and first-version boundaries, then produce a concise blueprint before creating files.
