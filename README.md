@@ -1,18 +1,81 @@
 # Codex Skill Builder
 
-Turn rough workflows, docs, scripts, and messy ideas into production-ready Codex skills.
+> Turn your messy workflow into a reusable Codex skill.
 
-Most people can use Codex. Fewer people know how to package a workflow so Codex can repeat it reliably. This skill helps you turn that repeatable work into a clean, installable skill with `SKILL.md`, references, scripts, examples, and validation.
+Most people ask Codex the same thing again and again.
 
-## What It Does
+This project helps you package that repeated work into a skill Codex can trigger, follow, validate, and improve.
 
-- Designs a Codex skill from a vague idea or repeated workflow.
-- Converts README/API/CLI docs into skill instructions.
-- Reviews existing skills for trigger quality, structure, safety, and Codex fit.
-- Scaffolds `SKILL.md`, `references/`, `scripts/`, `assets/`, and examples when useful.
-- Validates the result with a lightweight Python checker.
+In other words:
 
-## Quick Demo
+```text
+rough idea / README / script / checklist
+        -> Codex Skill Builder
+        -> clean Codex skill
+```
+
+## Why It Matters
+
+Codex is powerful, but repeated prompting is fragile.
+
+A good skill is a reusable operating manual:
+
+- it tells Codex when to wake up;
+- it gives Codex the workflow it should follow;
+- it keeps long knowledge in references;
+- it stores repeatable actions in scripts;
+- it adds safety boundaries before risky operations.
+
+This skill is for turning "I keep doing this manually" into "Codex knows how to do this now."
+
+## The Hook
+
+You do not need to know how to design a skill.
+
+Bring one of these:
+
+- a rough idea;
+- a repeated workflow;
+- a README/API/CLI doc;
+- a checklist;
+- a script folder;
+- an existing skill that feels messy.
+
+Codex Skill Builder turns it into a structured skill with a sane first version.
+
+## What You Get
+
+### 1. Need Snapshot
+
+Instead of asking 20 vague questions, it asks the few questions that actually change the design:
+
+- What should trigger the skill?
+- What input does the user provide?
+- What output should it produce?
+- What steps are repeated manually?
+- What must it never do without confirmation?
+- What does success look like?
+
+### 2. Skill Architecture
+
+It decides whether the skill should be:
+
+- just `SKILL.md`;
+- `SKILL.md` plus references;
+- a fuller skill with references, scripts, examples, and validation.
+
+### 3. Build + Review Loop
+
+It can:
+
+- scaffold a workspace preview copy;
+- write a clean `SKILL.md`;
+- move long guidance into `references/`;
+- add scripts for repeatable operations;
+- review trigger quality and safety;
+- validate the final folder.
+
+## Example
 
 Prompt:
 
@@ -20,21 +83,17 @@ Prompt:
 Use codex-skill-builder. I want a skill that summarizes Douyin videos from links, screenshots, or pasted subtitles.
 ```
 
-The skill guides Codex to:
+Codex Skill Builder will not rush into files.
 
-1. ask a compact Need Snapshot instead of a long interrogation;
-2. infer the missing defaults;
-3. propose a simple and stronger architecture;
-4. generate a workspace preview copy;
-5. add safety boundaries for scraping, copyright, and private data;
-6. validate the final skill folder.
+It first asks for a Need Snapshot, then proposes a simple version and a stronger version, then waits for you to say `generate`.
+
+That rhythm keeps the skill useful instead of overbuilt.
 
 ## Install
 
-Using the Codex skill installer:
+Install this skill from:
 
 ```text
-Install from:
 https://github.com/hey-zeyu/codex-skill-builder/tree/main/skills/codex-skill-builder
 ```
 
@@ -46,24 +105,23 @@ Copy-Item -Recurse ".\skills\codex-skill-builder" "$env:CODEX_HOME\skills\codex-
 
 Restart Codex after installing a new skill.
 
-## Usage Examples
+## Use It For
 
 ```text
 Use codex-skill-builder to turn my release checklist into a Codex skill.
 ```
 
 ```text
-Review this existing skill folder for structure, trigger quality, and safety boundaries:
-D:\path\to\my-skill
+Use codex-skill-builder to convert this CLI README into a safe Codex skill.
 ```
 
 ```text
-Convert this CLI README into a Codex skill that can operate the tool safely.
+Use codex-skill-builder to review this skill folder for trigger quality, structure, and safety.
 ```
 
-More examples are in [examples/prompts.md](examples/prompts.md).
+More examples: [examples/prompts.md](examples/prompts.md)
 
-## Repository Layout
+## Repository Structure
 
 ```text
 codex-skill-builder/
@@ -75,38 +133,30 @@ codex-skill-builder/
   skills/
     codex-skill-builder/
       SKILL.md
-      agents/
-        openai.yaml
+      agents/openai.yaml
       references/
       scripts/
-        quick_validate.py
-        package_skill.py
 ```
 
-## Why This Exists
+## Design Principles
 
-Codex skills are best when they are small, repeatable, and explicit about when to trigger. In practice, many useful workflows start as messy notes:
+### Small First
 
-- "Every week I do this manual audit."
-- "I always ask Codex to follow these 12 steps."
-- "This README is enough for a human, but Codex keeps missing edge cases."
-- "I built a skill, but I do not know if it is packaged correctly."
+Start with the smallest skill that can work. Add references, scripts, and assets only when they make the skill more repeatable.
 
-This skill gives Codex a reusable process for turning those rough inputs into maintainable skills.
+### Clear Trigger
 
-## Safety Defaults
+The description should make it obvious when Codex should use the skill.
 
-The generated or reviewed skills should add boundaries for risky operations:
+### Progressive Disclosure
 
-- no destructive file/database operations without confirmation;
-- no private-data scraping;
-- no credential leakage;
-- no paid API calls without cost/rate-limit notes;
-- no publishing, uploading, or external writes unless the user explicitly asks.
+Keep `SKILL.md` lean. Move long rules, examples, and domain knowledge into one-level reference files.
+
+### Safety Before Automation
+
+Skills that delete, upload, scrape, spend money, call APIs, or touch private data should require confirmation and clear boundaries.
 
 ## Validate
-
-From the repository root:
 
 ```powershell
 python .\skills\codex-skill-builder\scripts\quick_validate.py .\skills\codex-skill-builder
@@ -120,12 +170,10 @@ python .\skills\codex-skill-builder\scripts\package_skill.py .\skills\codex-skil
 
 ## Launch Copy
 
-Use this if you are sharing the project:
-
 ```text
-I made a Codex skill that builds other Codex skills from messy workflows, docs, scripts, and rough ideas.
+I made a Codex skill that turns messy workflows, docs, scripts, and checklists into clean Codex skills.
 
-It asks the right setup questions, proposes a skill architecture, generates a workspace preview, adds safety boundaries, and validates the result.
+It asks the right setup questions, proposes the skill architecture, generates a workspace preview, adds safety boundaries, and validates the result.
 
 Repo: https://github.com/hey-zeyu/codex-skill-builder
 ```
